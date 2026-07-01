@@ -1,11 +1,10 @@
-
-package lk.classmate.auth;
+package lk.classmate.listing;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthServiceApplicationTests {
+class ListingServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
