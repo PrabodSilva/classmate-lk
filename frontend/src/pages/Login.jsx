@@ -1,16 +1,24 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../api'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    // TODO (Sprint 2): call the real backend here
-    console.log('login attempt:', email, password)
-    navigate('/classes')   // for now, just go to the classes page
+    setError('')
+    try {
+      const res = await api.post('/auth/login', { email, password })
+      localStorage.setItem('token', res.data.token)
+      localStorage.setItem('name', res.data.name)
+      navigate('/classes')
+    } catch (err) {
+      setError('Invalid email or password')
+    }
   }
 
   return (
@@ -21,6 +29,7 @@ export default function Login() {
         <input placeholder="Password" type="password" value={password}
                onChange={e=>setPassword(e.target.value)} />
         <button type="submit">Login</button>
+        {error && <p style={{ color:'red' }}>{error}</p>}
       </form>
     </div>
   )

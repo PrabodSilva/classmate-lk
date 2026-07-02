@@ -1,18 +1,18 @@
-import { useState } from 'react'
-
-// Fake data for now. In Sprint 2 this will come from the real backend.
-const MOCK = [
-  { id:1, subject:'Combined Maths', teacher:'Mr. Perera',     district:'Colombo', mode:'Mass',       fee:2000 },
-  { id:2, subject:'Physics',        teacher:'Ms. Silva',      district:'Kandy',   mode:'Individual', fee:3500 },
-  { id:3, subject:'Combined Maths', teacher:'Mr. Fernando',   district:'Galle',   mode:'Online',     fee:1500 },
-  { id:4, subject:'Chemistry',      teacher:'Mr. Jayasuriya', district:'Colombo', mode:'Mass',       fee:2500 },
-]
+import { useState, useEffect } from 'react'
+import api from '../api'
 
 export default function Classes() {
   const [subject, setSubject] = useState('')
-  const filtered = MOCK.filter(c =>
-    subject === '' || c.subject.toLowerCase().includes(subject.toLowerCase())
-  )
+  const [classes, setClasses] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    api.get('/classes', { params: subject ? { subject } : {} })
+      .then(res => setClasses(res.data))
+      .catch(() => setClasses([]))
+      .finally(() => setLoading(false))
+  }, [subject])
 
   return (
     <div>
@@ -23,14 +23,17 @@ export default function Classes() {
         onChange={e=>setSubject(e.target.value)}
         style={{ padding:8, width:280, marginBottom:16 }}
       />
+
+      {loading && <p>Loading...</p>}
+      {!loading && classes.length === 0 && <p>No classes found.</p>}
+
       <div style={{ display:'grid', gap:12 }}>
-        {filtered.map(c => (
+        {classes.map(c => (
           <div key={c.id} style={{ border:'1px solid #ccc', borderRadius:8, padding:12 }}>
-            <strong>{c.subject}</strong> — {c.teacher}<br/>
+            <strong>{c.subject}</strong> — {c.teacherName}<br/>
             <small>{c.district} · {c.mode} · Rs. {c.fee}</small>
           </div>
         ))}
-        {filtered.length === 0 && <p>No classes match your filter.</p>}
       </div>
     </div>
   )
