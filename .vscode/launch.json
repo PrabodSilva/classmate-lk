@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "EurekaServerApplication",
+            "request": "launch",
+            "mainClass": "lk.classmate.eureka.EurekaServerApplication",
+            "projectName": "eureka-server"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ListingServiceApplication<listing-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "lk.classmate.listing.ListingServiceApplication",
+            "projectName": "listing-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
