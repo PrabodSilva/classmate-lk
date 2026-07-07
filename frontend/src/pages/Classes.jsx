@@ -29,8 +29,7 @@ export default function Classes() {
 
       <div style={{ display:'grid', gap:12 }}>
         {classes.map(c => (
-          <div key={c.id} style={{ border:'1px solid #ccc', borderRadius:8, padding:12 }}>
-            <strong>{c.subject}</strong> — {c.teacherName}<br/>
+<div key={c.id} className="card">            <strong>{c.subject}</strong> — {c.teacherName}<br/>
             <small>{c.district} · {c.mode} · Rs. {c.fee}</small>
           </div>
         ))}
