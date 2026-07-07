@@ -1,17 +1,32 @@
 services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Root@1234
+      - MYSQL_DATABASE=listingdb
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
   eureka-server:
     build: ./eureka-server
     ports:
       - "8761:8761"
 
-  api-gateway:
-    build: ./api-gateway
+  auth-service:
+    build: ./auth-service
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       - eureka-server
+      - mysql
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/authdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Root@1234
 
   listing-service:
     build: ./listing-service
@@ -19,8 +34,12 @@ services:
       - "8082:8082"
     depends_on:
       - eureka-server
+      - mysql
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/listingdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Root@1234
 
   recommendation-service:
     build: ./recommendation-service
@@ -31,3 +50,15 @@ services:
       - listing-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+volumes:
+  mysql-data:
