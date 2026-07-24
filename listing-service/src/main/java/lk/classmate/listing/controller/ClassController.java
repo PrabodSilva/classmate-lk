@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/classes")
-@CrossOrigin(origins = "*")
 public class ClassController {
 
     private final ClassPostRepository repo;
