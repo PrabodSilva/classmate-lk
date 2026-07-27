@@ -59,6 +59,17 @@ services:
       - eureka-server
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "8090:80"
+    depends_on:
+      - mysql
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - MYSQL_ROOT_PASSWORD=Root@1234
 
 volumes:
   mysql-data:
