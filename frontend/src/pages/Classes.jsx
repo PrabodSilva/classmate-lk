@@ -17,19 +17,22 @@ export default function Classes() {
   return (
     <div>
       <h3>Find Classes</h3>
+      <p>Search for tuition classes by subject.</p>
+
       <input
+        className="filter-input"
         placeholder="Filter by subject (e.g. Maths)"
         value={subject}
-        onChange={e=>setSubject(e.target.value)}
-        style={{ padding:8, width:280, marginBottom:16 }}
+        onChange={e => setSubject(e.target.value)}
       />
 
       {loading && <p>Loading...</p>}
       {!loading && classes.length === 0 && <p>No classes found.</p>}
 
-      <div style={{ display:'grid', gap:12 }}>
+      <div className="card-list">
         {classes.map(c => (
-<div key={c.id} className="card">            <strong>{c.subject}</strong> — {c.teacherName}<br/>
+          <div key={c.id} className="card">
+            <strong>{c.subject}</strong> — {c.teacherName}<br />
             <small>{c.district} · {c.mode} · Rs. {c.fee}</small>
           </div>
         ))}

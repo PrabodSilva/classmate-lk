@@ -21,23 +21,24 @@ export default function Recommend() {
     <div>
       <h3>Suggest a Good Class</h3>
       <p>Type a subject and we'll recommend the best classes for you.</p>
-      <div style={{ display:'flex', gap:8, marginBottom:16 }}>
+
+      <div className="search-row">
         <input
           placeholder="e.g. Maths"
           value={subject}
-          onChange={e=>setSubject(e.target.value)}
-          style={{ padding:8, width:220 }}
+          onChange={e => setSubject(e.target.value)}
         />
         <button onClick={getRecommendations}>Get Suggestions</button>
       </div>
 
       {searched && results.length === 0 && <p>No suggestions found for that subject.</p>}
-      <div style={{ display:'grid', gap:12 }}>
+
+      <div className="card-list">
         {results.map(c => (
-            <div key={c.id} className="card" style={{ borderLeft:'4px solid #2e8b57' }}>           
-             <strong>{c.subject}</strong> — {c.teacherName}<br/>
+          <div key={c.id} className="card card-recommended">
+            <strong>{c.subject}</strong> — {c.teacherName}<br />
             <small>{c.district} · {c.mode} · Rs. {c.fee}</small>
-            <span style={{ color:'#2e8b57', marginLeft:8, fontSize:12 }}>★ Recommended</span>
+            <span className="badge">★ Recommended</span>
           </div>
         ))}
       </div>
