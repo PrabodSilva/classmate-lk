@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/recommendations")
-@CrossOrigin(origins = "*")
 public class RecommendationController {
 
     private final ListingClient listingClient;

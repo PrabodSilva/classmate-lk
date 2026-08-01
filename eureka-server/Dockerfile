@@ -1,5 +1,5 @@
-# Start from a Java 17 base image
-FROM eclipse-temurin:17-jdk
+# Start from a Java 21 base image
+FROM eclipse-temurin:21-jdk
 
 # Set the folder inside the container where our app lives
 WORKDIR /app
