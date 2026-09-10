@@ -22,7 +22,12 @@ public class ClassPost {
     private String district;
 
     @NotBlank(message = "Mode is required (Individual / Mass / Online)")
-    private String mode;      // Individual / Mass / Online
+    private String mode;
+
+    @NotBlank(message = "Grade is required")
+    private String grade;
+
+    private String place;
 
     @Positive(message = "Fee must be greater than 0")
     private double fee;
@@ -39,6 +44,10 @@ public class ClassPost {
     public void setDistrict(String district) { this.district = district; }
     public String getMode() { return mode; }
     public void setMode(String mode) { this.mode = mode; }
+    public String getGrade() { return grade; }
+    public void setGrade(String grade) { this.grade = grade; }
+    public String getPlace() { return place; }
+    public void setPlace(String place) { this.place = place; }
     public double getFee() { return fee; }
     public void setFee(double fee) { this.fee = fee; }
 }

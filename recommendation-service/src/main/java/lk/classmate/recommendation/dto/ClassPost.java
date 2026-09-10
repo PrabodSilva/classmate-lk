@@ -6,6 +6,8 @@ public class ClassPost {
     private String teacherName;
     private String district;
     private String mode;
+    private String grade;
+    private String place;
     private double fee;
 
     public Long getId() { return id; }
@@ -18,6 +20,10 @@ public class ClassPost {
     public void setDistrict(String district) { this.district = district; }
     public String getMode() { return mode; }
     public void setMode(String mode) { this.mode = mode; }
+    public String getGrade() { return grade; }
+    public void setGrade(String grade) { this.grade = grade; }
+    public String getPlace() { return place; }
+    public void setPlace(String place) { this.place = place; }
     public double getFee() { return fee; }
     public void setFee(double fee) { this.fee = fee; }
 }

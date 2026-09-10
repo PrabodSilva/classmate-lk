@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
-// Calls Tharaka's LISTING-SERVICE by its Eureka name
+// Calls LISTING-SERVICE (Service 1) by its Eureka name
 @FeignClient(name = "LISTING-SERVICE")
 public interface ListingClient {
     @GetMapping("/classes")
-    List<ClassPost> getClasses(@RequestParam(required = false) String subject);
+    List<ClassPost> getClasses(@RequestParam(required = false) String subject,
+                               @RequestParam(required = false) String grade);
 }
