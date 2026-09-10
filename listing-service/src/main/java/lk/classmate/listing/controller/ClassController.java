@@ -19,20 +19,32 @@ public class ClassController {
         this.repo = repo;
     }
 
-    // CREATE — Teacher adds a class (now validated)
+    // CREATE — Teacher adds a class (validated)
     @PostMapping
     public ResponseEntity<ClassPost> addClass(@Valid @RequestBody ClassPost classPost) {
         ClassPost saved = repo.save(classPost);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // READ ALL — /classes  or filter: /classes?subject=Maths
+    // READ ALL — /classes  or filter: /classes?subject=Maths&grade=A/L
     @GetMapping
-    public List<ClassPost> getClasses(@RequestParam(required = false) String subject) {
+    public List<ClassPost> getClasses(@RequestParam(required = false) String subject,
+                                      @RequestParam(required = false) String grade) {
+        List<ClassPost> results;
+
         if (subject == null || subject.isBlank()) {
-            return repo.findAll();
+            results = repo.findAll();
+        } else {
+            results = repo.findBySubjectContainingIgnoreCase(subject);
         }
-        return repo.findBySubjectContainingIgnoreCase(subject);
+
+        if (grade != null && !grade.isBlank()) {
+            results = results.stream()
+                    .filter(c -> grade.equalsIgnoreCase(c.getGrade()))
+                    .toList();
+        }
+
+        return results;
     }
 
     // READ ONE — /classes/5
@@ -53,6 +65,8 @@ public class ClassController {
                     existing.setTeacherName(updated.getTeacherName());
                     existing.setDistrict(updated.getDistrict());
                     existing.setMode(updated.getMode());
+                    existing.setGrade(updated.getGrade());
+                    existing.setPlace(updated.getPlace());
                     existing.setFee(updated.getFee());
                     return ResponseEntity.ok(repo.save(existing));
                 })
