@@ -32,6 +32,13 @@ public class ClassPost {
     @Positive(message = "Fee must be greater than 0")
     private double fee;
 
+    // ---- Ratings: NOT stored in class_posts. Calculated from the ratings table. ----
+    @Transient
+    private double averageRating;
+
+    @Transient
+    private long ratingCount;
+
     public ClassPost() {}
 
     public Long getId() { return id; }
@@ -50,4 +57,9 @@ public class ClassPost {
     public void setPlace(String place) { this.place = place; }
     public double getFee() { return fee; }
     public void setFee(double fee) { this.fee = fee; }
+
+    public double getAverageRating() { return averageRating; }
+    public void setAverageRating(double averageRating) { this.averageRating = averageRating; }
+    public long getRatingCount() { return ratingCount; }
+    public void setRatingCount(long ratingCount) { this.ratingCount = ratingCount; }
 }

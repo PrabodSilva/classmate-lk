@@ -1,0 +1,25 @@
+/* Login status bar under the menu */
+.site-header .login-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.site-header .login-status strong { color: var(--teal-dark); }
+
+/* Small red "Log out" button (not the big green one) */
+.site-header .logout-btn,
+.site-header .logout-btn:hover,
+.site-header .logout-btn:active {
+  padding: 6px 14px;
+  font-size: 13px;
+  background: #fff;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  box-shadow: none;
+  transform: none;
+}
+.site-header .logout-btn:hover { background: #fef2f2; }
