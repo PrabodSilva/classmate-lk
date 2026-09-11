@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import api from '../api'
+import { getLoggedInUser, isTeacher, authHeaders } from '../auth'
 
 const GRADES = [
   'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
@@ -9,9 +10,13 @@ const GRADES = [
   'Scholarship Exam', 'Other / Custom'
 ]
 
+const linkStyle = { color: 'var(--teal-dark)', fontWeight: 600 }
+
 export default function AddClass() {
+  const user = getLoggedInUser()
+
   const [subject, setSubject] = useState('')
-  const [teacherName, setTeacherName] = useState('')
+  const [teacherName, setTeacherName] = useState(user ? user.name : '')
   const [district, setDistrict] = useState('')
   const [mode, setMode] = useState('Individual')
   const [grade, setGrade] = useState('Grade 1')
@@ -38,13 +43,18 @@ export default function AddClass() {
         grade,
         place: mode === 'Mass' ? place : '',
         fee: Number(fee)
-      })
+      }, { headers: authHeaders() })
       setMessage('Class added successfully! Redirecting...')
       setTimeout(() => navigate('/classes'), 1500)
     } catch (err) {
-      if (err.response && err.response.status === 400) {
+      const status = err.response ? err.response.status : 0
+      if (status === 400) {
         setErrors(err.response.data)
         setMessage('Please fix the errors below.')
+      } else if (status === 401) {
+        setMessage('Your login has expired. Please log in again as a teacher.')
+      } else if (status === 403) {
+        setMessage('Only teachers can add classes.')
       } else {
         setMessage('Could not add class. Is the backend running?')
       }
@@ -53,6 +63,35 @@ export default function AddClass() {
     }
   }
 
+  // ---- Not logged in ----
+  if (!user) {
+    return (
+      <div>
+        <h3>Add a New Class</h3>
+        <p>
+          Please <Link to="/" style={linkStyle}>log in</Link> with a teacher account to add a class.
+        </p>
+        <p>
+          New teacher? <Link to="/register" style={linkStyle}>Register</Link> and choose "Teacher".
+        </p>
+      </div>
+    )
+  }
+
+  // ---- Logged in, but not a teacher ----
+  if (!isTeacher(user)) {
+    return (
+      <div>
+        <h3>Add a New Class</h3>
+        <p>Only teachers can add classes. You are logged in as a student.</p>
+        <p>
+          Students can <Link to="/classes" style={linkStyle}>find classes</Link> and rate them instead.
+        </p>
+      </div>
+    )
+  }
+
+  // ---- Teacher: show the form ----
   const errStyle = { color: 'red', fontSize: 12, margin: 0 }
 
   return (

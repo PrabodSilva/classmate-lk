@@ -1,5 +1,6 @@
 package lk.classmate.listing.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -21,10 +22,10 @@ public class JwtUtil {
 
     /**
      * Reads "Authorization: Bearer <token>".
-     * Returns the student's email if the token is real and not expired.
+     * Returns everything inside the token (email, role, expiry) if it is real and not expired.
      * Returns null if there is no token, or it is fake/expired.
      */
-    public String getEmailFromHeader(String authHeader) {
+    public Claims getClaims(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return null;
         }
@@ -34,10 +35,21 @@ public class JwtUtil {
                     .verifyWith(key)
                     .build()
                     .parseSignedClaims(token)
-                    .getPayload()
-                    .getSubject();
+                    .getPayload();
         } catch (JwtException | IllegalArgumentException e) {
             return null;
         }
+    }
+
+    /** The student's or teacher's email, or null. */
+    public String getEmailFromHeader(String authHeader) {
+        Claims claims = getClaims(authHeader);
+        return claims == null ? null : claims.getSubject();
+    }
+
+    /** "STUDENT" or "TEACHER", or null. */
+    public String getRoleFromHeader(String authHeader) {
+        Claims claims = getClaims(authHeader);
+        return claims == null ? null : claims.get("role", String.class);
     }
 }
