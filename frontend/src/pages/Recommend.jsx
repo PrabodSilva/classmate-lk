@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import api from '../api'
+import Stars from '../Stars.jsx'
 
 const GRADES = [
   'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
@@ -35,12 +37,15 @@ export default function Recommend() {
 
   return (
     <div>
-      <h3>Best Value Recommendations</h3>
-      <p>We compare every matching class against the market average and pick the best value.</p>
+      <h3>Best Class Recommendations</h3>
+      <p>
+        We score every matching class using student ratings (60%) and price value (40%),
+        then pick the top 3.
+      </p>
 
       <div className="search-row">
         <input
-          placeholder="Subject (e.g. Mathematics)"
+          placeholder="Subject (e.g. Physics)"
           value={subject}
           onChange={e => setSubject(e.target.value)}
         />
@@ -62,8 +67,8 @@ export default function Recommend() {
         <>
           <div className="market-box">
             <strong>Market analysis</strong><br />
-            {data.totalClassesFound} classes found · Average fee: Rs. {data.averageFee}
-            {' '}· Range: Rs. {data.lowestFee} – Rs. {data.highestFee}
+            {data.totalClassesFound} {data.totalClassesFound === 1 ? 'class' : 'classes'} found &middot; {data.ratedClasses} rated by students<br />
+            Average fee: Rs. {data.averageFee} &middot; Range: Rs. {data.lowestFee} &ndash; Rs. {data.highestFee}
           </div>
 
           <div className="card-list">
@@ -71,14 +76,36 @@ export default function Recommend() {
               <div key={r.classPost.id} className="card card-recommended">
                 <div className="rank-row">
                   <span className="rank">#{r.rank}</span>
-                  <span className="score">Value score: {r.valueScore}/100</span>
+                  <span className="score">Score: {r.valueScore}/100</span>
                 </div>
-                <strong>{r.classPost.subject}</strong> — {r.classPost.teacherName}<br />
+
+                <strong>{r.classPost.subject}</strong> &mdash; {r.classPost.teacherName}<br />
                 <small>
-                  {r.classPost.grade} · {r.classPost.district} · {r.classPost.mode}
-                  {r.classPost.place ? ` · ${r.classPost.place}` : ''} · Rs. {r.classPost.fee}
+                  {r.classPost.grade} &middot; {r.classPost.district} &middot; {r.classPost.mode}
+                  {r.classPost.place && <> &middot; {r.classPost.place}</>} &middot; Rs. {r.classPost.fee}
                 </small>
+
+                <div className="card-rating">
+                  {r.classPost.ratingCount > 0 ? (
+                    <span>
+                      <Stars value={r.classPost.averageRating} size={15} />{' '}
+                      {r.classPost.averageRating.toFixed(1)} ({r.classPost.ratingCount})
+                    </span>
+                  ) : (
+                    <span>No ratings yet</span>
+                  )}
+                  <span>Rating {r.ratingScore} &middot; Price {r.priceScore}</span>
+                </div>
+
                 <p className="reason">{r.reason}</p>
+
+                <Link
+                  to={`/classes/${r.classPost.id}`}
+                  className="view-link"
+                  style={{ textDecoration: 'none', fontSize: 13 }}
+                >
+                  View &amp; rate &rarr;
+                </Link>
               </div>
             ))}
           </div>
