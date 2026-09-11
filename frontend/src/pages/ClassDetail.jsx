@@ -2,15 +2,10 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import api from '../api'
 import Stars from '../Stars.jsx'
+import { getLoggedInUser, isTeacher, authHeaders } from '../auth'
 
 const STAR = '\u2605'
 const LABELS = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent']
-
-// Adds the login token (saved by the Login page) to a request, if we have one
-function authHeaders() {
-  const token = localStorage.getItem('token')
-  return token ? { Authorization: 'Bearer ' + token } : {}
-}
 
 export default function ClassDetail() {
   const { id } = useParams()
@@ -82,6 +77,8 @@ export default function ClassDetail() {
       } else if (status === 401) {
         setLoggedIn(false)
         setMessage('Your login has expired. Please log in again.')
+      } else if (status === 403) {
+        setMessage('Only students can rate classes.')
       } else if (status === 400) {
         setMessage(err.response.data.stars || 'Please choose between 1 and 5 stars.')
       } else {
@@ -103,6 +100,8 @@ export default function ClassDetail() {
     )
   }
 
+  const user = getLoggedInUser()
+  const teacher = isTeacher(user)
   const shown = hovered || selected
 
   return (
@@ -138,17 +137,21 @@ export default function ClassDetail() {
 
       <div className="rate-box">
         {!loggedIn && (
-          <p>Please <Link to="/">log in</Link> to rate this class.</p>
+          <p>Please <Link to="/">log in</Link> as a student to rate this class.</p>
         )}
 
-        {loggedIn && myStars > 0 && (
+        {loggedIn && teacher && (
+          <p>Teachers can't rate classes. Log in with a student account to rate.</p>
+        )}
+
+        {loggedIn && !teacher && myStars > 0 && (
           <>
             <p>You rated this class</p>
             <Stars value={myStars} size={30} />
           </>
         )}
 
-        {loggedIn && myStars === 0 && (
+        {loggedIn && !teacher && myStars === 0 && (
           <>
             <p>How would you rate this class?</p>
 
