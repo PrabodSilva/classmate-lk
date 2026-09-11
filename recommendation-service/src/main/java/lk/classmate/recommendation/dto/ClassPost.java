@@ -10,6 +10,10 @@ public class ClassPost {
     private String place;
     private double fee;
 
+    // NEW: sent by listing-service (Service 1)
+    private double averageRating;
+    private long ratingCount;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getSubject() { return subject; }
@@ -26,4 +30,9 @@ public class ClassPost {
     public void setPlace(String place) { this.place = place; }
     public double getFee() { return fee; }
     public void setFee(double fee) { this.fee = fee; }
+
+    public double getAverageRating() { return averageRating; }
+    public void setAverageRating(double averageRating) { this.averageRating = averageRating; }
+    public long getRatingCount() { return ratingCount; }
+    public void setRatingCount(long ratingCount) { this.ratingCount = ratingCount; }
 }
