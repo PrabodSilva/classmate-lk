@@ -1,0 +1,102 @@
+/* ===== Ratings feature: stars, clickable cards, class detail page ===== */
+
+/* ---- Clickable class cards on Find Classes ---- */
+.card-list .card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.card-rating {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.view-link { color: var(--teal); font-weight: 600; }
+
+/* ---- Star colours ---- */
+.stars { letter-spacing: 2px; }
+.star-on { color: var(--gold); }
+.star-off { color: #cbd5e1; }
+
+/* ---- Class detail page ---- */
+.detail { max-width: 620px; margin: 0 auto; }
+
+.detail .back-link {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+.detail .back-link:hover { text-decoration: underline; }
+
+.detail .detail-card { margin-top: 18px; }
+.detail .detail-card:hover { transform: none; }
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row span { color: var(--muted); }
+
+.rating-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 22px 0;
+}
+.big-number {
+  font-family: 'Outfit', sans-serif;
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1;
+}
+.rating-summary small { color: var(--muted); }
+
+.rate-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 22px;
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  border-radius: 14px;
+}
+.rate-box a { color: var(--teal-dark); font-weight: 600; }
+
+/* ---- Star picker: undo the normal green button style ---- */
+.stars-picker { display: flex; gap: 6px; }
+
+.stars-picker button,
+.stars-picker button:hover,
+.stars-picker button:active {
+  background: none;
+  box-shadow: none;
+  border: none;
+  padding: 0 2px;
+  font-size: 38px;
+  line-height: 1;
+  transform: none;
+}
+.stars-picker button:hover { transform: scale(1.15); }
+.stars-picker button.star-on { color: var(--gold); }
+.stars-picker button.star-off { color: #cbd5e1; }
+
+.rate-box .star-label {
+  min-height: 20px;
+  font-weight: 600;
+  color: var(--teal-dark);
+}

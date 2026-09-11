@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import api from '../api'
+import Stars from '../Stars.jsx'
 
 const GRADES = [
   'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
@@ -29,7 +31,7 @@ export default function Classes() {
   return (
     <div>
       <h3>Find Classes</h3>
-      <p>Search for tuition classes by subject and grade.</p>
+      <p>Search for tuition classes by subject and grade. Click a class to see details and rate it.</p>
 
       <div className="search-row">
         <input
@@ -48,13 +50,24 @@ export default function Classes() {
 
       <div className="card-list">
         {classes.map(c => (
-          <div key={c.id} className="card">
-            <strong>{c.subject}</strong> — {c.teacherName}<br />
+          <Link key={c.id} to={`/classes/${c.id}`} className="card card-link">
+            <strong>{c.subject}</strong> &mdash; {c.teacherName}<br />
             <small>
-              {c.grade} · {c.district} · {c.mode}
-              {c.place ? ` · ${c.place}` : ''} · Rs. {c.fee}
+              {c.grade} &middot; {c.district} &middot; {c.mode}
+              {c.place && <> &middot; {c.place}</>} &middot; Rs. {c.fee}
             </small>
-          </div>
+
+            <div className="card-rating">
+              {c.ratingCount > 0 ? (
+                <span>
+                  <Stars value={c.averageRating} size={15} /> {c.averageRating.toFixed(1)} ({c.ratingCount})
+                </span>
+              ) : (
+                <span>No ratings yet</span>
+              )}
+              <span className="view-link">View &amp; rate &rarr;</span>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
